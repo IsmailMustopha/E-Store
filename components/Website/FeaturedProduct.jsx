@@ -5,11 +5,15 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import ProductBox from "./ProductBox";
 
 const FeaturedProduct = async () => {
-  const { data: productData } = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/get-featured-product`
-  );
-
-  // console.log(productData);
+ let productData = null;
+ try {
+   const { data } = await axios.get(
+     `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/get-featured-product`,
+   );
+   productData = data;
+ } catch (error) {
+   console.log(error);
+ }
   
   
   if(!productData) return null
