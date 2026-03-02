@@ -1,28 +1,28 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
-  },
-  // NEXT 15 REQUIREMENT: React Compiler belongs inside experimental
   experimental: {
     reactCompiler: true,
+    // This helps Next.js 15 handle large icon libraries
+    optimizePackageImports: [
+      'react-icons', 
+      'lucide-react', 
+      '@mui/material', 
+      '@radix-ui/react-icons'
+    ],
   },
   images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "res.cloudinary.com",
-        port: "",
         pathname: "/**",
-        search: "",
       },
     ],
   },
 };
 
 export default nextConfig;
+
 
 // /** @type {import('next').NextConfig} */
 // const nextConfig = {
