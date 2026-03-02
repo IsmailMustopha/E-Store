@@ -3,7 +3,7 @@ import { USER_DASHBOARD, WEBSITE_LOGIN } from "./app/routes/WebsitePanelRoute";
 import { ADMIN_DASHBOARD } from "./app/routes/AdminPanelRoute";
 import { jwtVerify } from "jose";
 
-export async function proxy(request) {
+export async function middleware(request) {
   try {
     const pathname = request.nextUrl.pathname;
     const hasToken = request.cookies.has("access_token");
