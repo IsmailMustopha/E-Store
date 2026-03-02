@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, Suspense } from "react"; 
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { Loader2, CheckCircle, XCircle } from "lucide-react";
@@ -8,7 +8,8 @@ import { useDispatch } from "react-redux";
 import { clearCart } from "@/store/reducer/cartReducer";
 import { WEBSITE_ORDER_DETAILS } from "@/app/routes/WebsitePanelRoute";
 
-const VerifyPaymentPage = () => {
+
+const VerifyPaymentContent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
@@ -95,6 +96,21 @@ const VerifyPaymentPage = () => {
         </div>
       )}
     </div>
+  );
+};
+
+// 3. The default export MUST wrap the content in Suspense
+const VerifyPaymentPage = () => {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-[70vh]">
+          <Loader2 className="w-12 h-12 animate-spin text-orange-500" />
+        </div>
+      }
+    >
+      <VerifyPaymentContent />
+    </Suspense>
   );
 };
 

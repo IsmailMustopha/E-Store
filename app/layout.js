@@ -2,7 +2,7 @@ import { ToastContainer } from "react-toastify";
 import "./globals.css";
 import { Assistant } from "next/font/google";
 import GlobalProvider from "@/components/Application/GlobalProvider";
-import Script from "next/script"; // 1. Import the Script component
+import Script from "next/script"; 
 
 const assistantFont = Assistant({
   weight: ["400", "500", "600", "700", "800"],

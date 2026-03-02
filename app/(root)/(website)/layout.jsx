@@ -1,24 +1,28 @@
-import Footer from '@/components/Website/Footer'
-import Header from '@/components/Website/Header'
-import { Kumbh_Sans } from 'next/font/google'
-import React from 'react'
-
-const kumbh = Kumbh_Sans({
-  weight: ['400', '500', '600', '700', '800'],
-  display: 'swap',
-  subsets: ['latin']
-})
+import AppSidebar from "@/components/Application/Admin/AppSidebar";
+// import ThemeProvider from "@/components/Application/Admin/ThemeProvider";
+import Topbar from "@/components/Application/Admin/Topbar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { ThemeProvider } from "next-themes";
+import React from "react";
 
 const layout = ({ children }) => {
   return (
-    <div className={kumbh.className}>
-      <Header />
-      <main>
-        {children}
-      </main>
-      <Footer />
-    </div>
-  )
-}
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <SidebarProvider>
+        <AppSidebar />
+        <main className="md:w-[calc(100vw-16rem)] w-full">
+          <div className="pt-[70px] md:px-8 px-5 min-h-[calc(100vh-40px)] pb-10">
+            <Topbar />
+            {children}
+          </div>
 
-export default layout
+          <div className="border-t h-[40px] flex justify-center items-center bg-gray-50 dark:bg-background text-sm">
+            © 2026 Developer Mustopha. All Rights Reserved.
+          </div>
+        </main>
+      </SidebarProvider>
+    </ThemeProvider>
+  );
+};
+
+export default layout;
