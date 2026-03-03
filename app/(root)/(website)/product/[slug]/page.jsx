@@ -6,7 +6,7 @@ const ProductPage = async ({ params, searchParams }) => {
   const { slug } = await params;
   const { color, size } = await searchParams;
 
-  let url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/details/${slug}`;
+  let url = `${process.env.API_BASE_URL}/product/details/${slug}`;
 
   // Replace the 'if (color && size)' block with this:
   const query = new URLSearchParams();
