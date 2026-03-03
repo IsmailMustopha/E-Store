@@ -1,3 +1,4 @@
+import MediaModel from "@/models/Media.model";
 import { isAuthenticated } from "@/lib/authentication";
 import connectDB from "@/lib/databaseConnection";
 import { catchError, response } from "@/lib/helperFunction";
