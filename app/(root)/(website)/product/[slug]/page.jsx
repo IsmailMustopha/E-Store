@@ -16,10 +16,10 @@ const ProductPage = async ({ params, searchParams }) => {
     await connectDB();
 
     // 3. Reuse your exact API logic here
-    const filter = {
-      deletedAt: null,
-      slug: { $regex: new RegExp(`^${slug}$`, "i") },
-    };
+ const filter = {
+   deletedAt: null,
+   slug: slug, // Just use the direct string instead of Regex for a moment
+ };
 
     const getProduct = await ProductModel.findOne(filter)
       .populate("media", "secure_url")
@@ -77,19 +77,22 @@ const ProductPage = async ({ params, searchParams }) => {
     });
 
     // 6. Pass data to your Client Component
-    return (
-      <ProductDetails
-        product={JSON.parse(JSON.stringify(getProduct))}
-        variant={JSON.parse(JSON.stringify(variant))}
-        colors={getColor}
-        sizes={getSize.length ? getSize.map((item) => item.size) : []}
-        reviewCount={review}
-      />
-    );
-  } catch (error) {
-    console.error("Database Fetch Error:", error);
-    return <div>Something went wrong loading the product.</div>;
-  }
+   return (
+     <ProductDetails
+       product={JSON.parse(JSON.stringify(getProduct))}
+       variant={JSON.parse(JSON.stringify(variant))}
+       colors={getColor}
+       sizes={getSize.length ? getSize.map((item) => item.size) : []}
+       reviewCount={review}
+     />
+   );
+  }catch (error) {
+  return (
+    <div className="p-10">
+      <h1>Debug Error: {error.message}</h1>
+      <pre>{JSON.stringify(error, null, 2)}</pre>
+    </div>
+  );
 };
 
 export default ProductPage;
