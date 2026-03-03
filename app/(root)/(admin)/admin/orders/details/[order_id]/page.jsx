@@ -7,7 +7,7 @@ import axios from "axios";
 
 // Components
 import BreadCrumb from "@/components/Application/Admin/BreadCrumb";
-import { Select } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ButtonLoading from "@/components/Application/ButtonLoading";
 
 // Hooks & Constants
@@ -228,13 +228,25 @@ const StatusUpdateSection = ({ status, setStatus, onSave, loading }) => (
     <h4 className="text-lg font-semibold mb-4 text-gray-800">
       Update Order Status
     </h4>
-    <Select
+    <Select onValueChange={setStatus} value={status}>
+      <SelectTrigger className="w-full">
+        <SelectValue placeholder="Select status" />
+      </SelectTrigger>
+      <SelectContent>
+        {STATUS_OPTIONS.map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+    {/* <Select
       options={STATUS_OPTIONS}
       selected={status}
       setSelected={setStatus}
       placeholder="Select status"
       isMulti={false}
-    />
+    /> */}
     <ButtonLoading
       loading={loading}
       type="button"
