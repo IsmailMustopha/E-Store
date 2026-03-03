@@ -17,7 +17,6 @@ export async function GET(request) {
 
     const searchParams = request.nextUrl.searchParams;
 
-    // Extract query parameters
     const start = parseInt(searchParams.get("start") || 0, 10);
     const size = parseInt(searchParams.get("size") || 10, 10);
     const filters = JSON.parse(searchParams.get("filters") || "[]");
@@ -25,7 +24,6 @@ export async function GET(request) {
     const sorting = JSON.parse(searchParams.get("sorting") || "[]");
     const deleteType = searchParams.get("deleteType");
 
-    // Build match query
     let matchQuery = {};
 
     if (deleteType === "SD") {
@@ -34,31 +32,28 @@ export async function GET(request) {
       matchQuery = { deletedAt: { $ne: null } };
     }
 
-    // Global search
-  if (globalFilter) {
-    matchQuery["$or"] = [
-      { order_id: { $regex: globalFilter, $options: "i" } },
-      { payment_id: { $regex: globalFilter, $options: "i" } },
-      { name: { $regex: globalFilter, $options: "i" } },
-      { email: { $regex: globalFilter, $options: "i" } },
-      { phone: { $regex: globalFilter, $options: "i" } },
-      { country: { $regex: globalFilter, $options: "i" } },
-      { state: { $regex: globalFilter, $options: "i" } },
-      { city: { $regex: globalFilter, $options: "i" } },
-      { pincode: { $regex: globalFilter, $options: "i" } },
-      { discount: { $regex: globalFilter, $options: "i" } },
-      { couponDiscount: { $regex: globalFilter, $options: "i" } },
-      { totalAmount: { $regex: globalFilter, $options: "i" } },
-      { status: { $regex: globalFilter, $options: "i" } },
-    ];
-  }
+    if (globalFilter) {
+      matchQuery["$or"] = [
+        { order_id: { $regex: globalFilter, $options: "i" } },
+        { payment_id: { $regex: globalFilter, $options: "i" } },
+        { name: { $regex: globalFilter, $options: "i" } },
+        { email: { $regex: globalFilter, $options: "i" } },
+        { phone: { $regex: globalFilter, $options: "i" } },
+        { country: { $regex: globalFilter, $options: "i" } },
+        { state: { $regex: globalFilter, $options: "i" } },
+        { city: { $regex: globalFilter, $options: "i" } },
+        { pincode: { $regex: globalFilter, $options: "i" } },
+        { discount: { $regex: globalFilter, $options: "i" } },
+        { couponDiscount: { $regex: globalFilter, $options: "i" } },
+        { totalAmount: { $regex: globalFilter, $options: "i" } },
+        { status: { $regex: globalFilter, $options: "i" } },
+      ];
+    }
 
-    // Column filteration
-  filters.forEach((filter) => {
+    filters.forEach((filter) => {
       matchQuery[filter.id] = { $regex: filter.value, $options: "i" };
-  });
+    });
 
-    // Sorting
     let sortQuery = {};
     sorting.forEach((sort) => {
       sortQuery[sort.id] = sort.desc ? -1 : 1;
@@ -71,10 +66,8 @@ export async function GET(request) {
       { $limit: size },
     ];
 
-    // Execute query
     const getOrders = await OrderModel.aggregate(aggregatePipeline);
 
-    // Get totalRowCount
     const totalRowCount = await OrderModel.countDocuments(matchQuery);
 
     return NextResponse.json({

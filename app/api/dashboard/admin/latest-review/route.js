@@ -1,6 +1,8 @@
 import { isAuthenticated } from "@/lib/authentication";
 import connectDB from "@/lib/databaseConnection";
 import { catchError, response } from "@/lib/helperFunction";
+import MediaModel from "@/models/Media.model";
+import ProductModel from "@/models/Product.model";
 import ReviewModel from "@/models/Review.model";
 
 export async function GET() {

@@ -29,7 +29,6 @@ export async function GET(request, { params }) {
 
     filter.slug = slug;
 
-    // get product
     const getProduct = await ProductModel.findOne(filter)
       .populate("media", "secure_url")
       .lean();
@@ -38,16 +37,10 @@ export async function GET(request, { params }) {
       return response(false, 404, "Product not found.");
     }
 
-    // get product variant
-    // const variantFilter = {
-    //   product: getProduct._id,
-    // };
-
-    
-const variantFilter = {
-  product: new Types.ObjectId(getProduct._id),
-  deletedAt: null,
-};
+    const variantFilter = {
+      product: new Types.ObjectId(getProduct._id),
+      deletedAt: null,
+    };
     if (size) {
       variantFilter.size = size;
     }
@@ -56,32 +49,21 @@ const variantFilter = {
       variantFilter.color = color;
     }
 
-    // 1. Try to find the specific variant requested
     let variant = await ProductVariantModel.findOne(variantFilter)
       .populate("media")
       .lean();
 
-    // 2. Fallback: If specific size/color not found, get the first available variant
+    variant;
     if (!variant && (size || color)) {
       variant = await ProductVariantModel.findOne({ product: getProduct._id })
         .populate("media")
         .lean();
     }
 
-    // 3. Only 404 if NO variants exist at all for this product
     if (!variant) {
       return response(false, 404, "This product has no available variants.");
     }
 
-    // const variant = await ProductVariantModel.findOne(variantFilter)
-    //   .populate("media", "secure_url")
-    //   .lean();
-
-    // if (!variant) {
-    //   return response(false, 404, "Product not found.");
-    // }
-
-    // get color and size
     const getColor = await ProductVariantModel.distinct("color", {
       product: getProduct._id,
     });
@@ -99,7 +81,6 @@ const variantFilter = {
       { $project: { _id: 0, size: "$_id" } },
     ]);
 
-    // get review
     const review = await ReviewModel.countDocuments({
       product: getProduct._id,
     });
@@ -108,7 +89,7 @@ const variantFilter = {
       products: getProduct,
       variant: variant,
       colors: getColor,
-      sizes: getSize.length ? getSize.map(item => item.size) : [],
+      sizes: getSize.length ? getSize.map((item) => item.size) : [],
       reviewCount: review,
     };
 
